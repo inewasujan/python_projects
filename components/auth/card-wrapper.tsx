@@ -35,7 +35,6 @@ export const CardWrapper = ({
       </CardContent>
       {showSocial && (
         <CardFooter>
-          <Social />
         </CardFooter>
       )}
       <CardFooter>

@@ -1,3 +1,13 @@
+interface IIconProps {
+  stroke?: string;
+  fill?: string;
+  height?: number;
+  width?: number;
+  strokeWidth?: number;
+  className?: string;
+
+}
+
 const MenuCloseIcon: React.FC<IIconProps> = ({
   stroke = "#000",
   fill = "none",
