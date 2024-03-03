@@ -37,11 +37,15 @@ current_state = menu_state
 #define game variables 
 rows = 5
 cols = 5
+game_over_timer = None
 alien_cooldown = 1000 #milliseconds
 last_alien_shot = pygame.time.get_ticks()
 countdown = 3
 last_count = pygame.time.get_ticks()
 game_over = 0 #0 is no game over, 1 means player has won, =1 means player has lost
+GAME_OVER_DELAY = 2000
+
+
 
 #define fps
 clock = pygame.time.Clock()
@@ -71,7 +75,7 @@ bullet_sound.set_volume(0.5)
 #creating buttons instances
 start_button = button.Button(200, 300, start_img, 0.5)
 exit_button = button.Button(210, 400, exit_img, 0.5)
-restart_button = button.Button(200, 500, restart_img, 0.5)
+restart_button = button.Button(210, 300, restart_img, 0.5)
 
 def draw_bg():
     screen.blit(bg, (0, 0))  
@@ -83,6 +87,23 @@ def draw_bg1():
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
+    
+def restart_game():
+    global spaceship, bullet_group, alien_group, alien_bullet_group, explosion_group, game_over, countdown, last_alien_shot
+    game_over = 0
+    countdown = 3
+    
+    #reset game variables
+    bullet_group.empty()
+    alien_group.empty()
+    alien_bullet_group.empty()
+    explosion_group.empty()
+    create_aliens()
+    pygame.mixer.music.play()
+    
+    #reset spaceship
+    spaceship = Spaceship(int(SCREEN_WIDTH / 2), SCREEN_HEIGHT - 100, 3)
+    spaceship_group.add(spaceship)
 
 #Spaceship class
 class Spaceship(pygame.sprite.Sprite):
@@ -247,19 +268,17 @@ spaceship_group.add(spaceship)
 paused = False
 run = True
 while run:    
-    clock.tick(fps)
+    clock.tick(fps)       
     
     #Event Handling 
     for event in pygame.event.get():     
         if event.type == pygame.QUIT:
             run = False
         elif event.type == pygame.KEYDOWN:
-            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     if not paused:
                         paused = True
-                        current_state = PAUSE_STATE
-                        draw_text("PAUSED", font40, white, int(SCREEN_WIDTH / 2 - 100), int(SCREEN_HEIGHT / 2 + 50))
+                        current_state = PAUSE_STATE                        
                     else:
                         paused = False
                         current_state = GAMEPLAY_STATE                        
@@ -267,13 +286,24 @@ while run:
             if current_state == menu_state:
                 #check if "Start" button is clicked
                 if start_button.rect.collidepoint(event.pos):
-                    current_state = GAMEPLAY_STATE    
+                    current_state = GAMEPLAY_STATE  
+            if current_state == GAME_OVER_STATE:
+                if restart_button.rect.collidepoint(event.pos):
+                    restart_game()
+                    current_state = GAMEPLAY_STATE
+                if exit_button.rect.collidepoint(event.pos):
+                    run = False
+        if game_over != 0:
+            current_state = GAME_OVER_STATE 
+    
+    
     #Update game based on current state               
     if current_state == menu_state:
-        #Display menu screen
+        
+        #load music and play
         pygame.mixer.music.load("Space_Invaders/sounds/spaceinvaders1.mpeg")
-        pygame.mixer.music.play()
         pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play()
         
         #draw Background
         draw_bg()
@@ -284,9 +314,32 @@ while run:
         if exit_button.draw(screen):
                 run = False
                 
-    elif current_state == GAMEPLAY_STATE:
-        #Game iis in gameplay state
+    #PAUSE_STATE SECTION ON GAME LOOP
+    elif current_state == PAUSE_STATE:
         
+        draw_bg()   
+        draw_text("PAUSED", font40, white, int(SCREEN_WIDTH / 2 - 100), int(SCREEN_HEIGHT / 2 - 170))   
+            
+        if restart_button.draw(screen):
+            restart_game()
+            current_state = GAMEPLAY_STATE
+        if exit_button.draw(screen):
+            run = False
+
+    #GAME_OVER_STATE SECTION ON GAME LOOP            
+    elif current_state == GAME_OVER_STATE:
+        
+        draw_bg()   
+        draw_text("GAME OVER!", font40, white, int(SCREEN_WIDTH / 2 - 130), int(SCREEN_HEIGHT / 2 - 170))   
+            
+                    
+        if restart_button.draw(screen):
+            restart_game()
+            current_state = GAMEPLAY_STATE
+        if exit_button.draw(screen):
+            run = False 
+                
+    elif current_state == GAMEPLAY_STATE:      
         
         #draw background
         draw_bg1()
@@ -325,10 +378,13 @@ while run:
                     
                 else:
                     if game_over == -1:
-                        draw_text("GAME OVER!", font40, white, int(SCREEN_WIDTH / 2 - 100), int(SCREEN_HEIGHT / 2 + 50))
-                    if game_over == 1:
-                        draw_text("YOU WIN!", font40, white, int(SCREEN_WIDTH / 2 - 100), int(SCREEN_HEIGHT / 2 + 50))         
-        
+                        if game_over_timer == None:
+                            game_over_timer = pygame.time.get_ticks()
+                        elif pygame.time.get_ticks() - game_over_timer < GAME_OVER_DELAY:
+                            pygame.mixer.music.fadeout(2000)
+                        if game_over == 1:
+                            pygame.mixer.music.fadeout(3000)
+                            draw_text("YOU WIN!", font40, white, int(SCREEN_WIDTH / 2 - 100), int(SCREEN_HEIGHT / 2 + 50))         
         #update explosion group
         explosion_group.update()
                 
