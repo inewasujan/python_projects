@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Link from "next/link";
 import { MenuOpenIcon, MenuCloseIcon } from "@/lib/icons";
 
@@ -53,7 +52,12 @@ export default function NileHeader() {
             Services
           </Link>
           <Link href="/contact">
-            <Button variant="outline" className="hover:bg-indigo-600 hover:text-white hover:border-indigo-600">Book Now</Button>
+            <Button
+              variant="outline"
+              className="hover:bg-indigo-600 hover:text-white hover:border-indigo-600"
+            >
+              Book Now
+            </Button>
           </Link>
         </nav>
       </div>
@@ -71,7 +75,9 @@ export default function NileHeader() {
             <Link href="/contact" className="block">
               Services
             </Link>
-            <Button>Book Now</Button>
+            <Link href="/contact" className="block">
+              <Button>Book Now</Button>
+            </Link>
           </div>
         </div>
       )}

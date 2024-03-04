@@ -10,39 +10,37 @@ export const Navbar = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-secondary flex justify-between items-center p-4 rounded-xl w-[600px] shadow-sm">
+    <nav className="container bg-secondary flex justify-between items-center p-4 rounded-xl shadow-sm">
       <div className="flex gap-x-2">
-        <Button 
+        <Button
           asChild
-          variant={pathname === "/server" ? "default" : "outline"}
+          variant={pathname === "/about/list" ? "default" : "outline"}
         >
-          <Link href="/server">
-            Server
-          </Link>
+          <Link href="/about/list">Current Aboutus</Link>
         </Button>
-        <Button 
+        <Button
           asChild
-          variant={pathname === "/client" ? "default" : "outline"}
+          variant={pathname === "/about/create" ? "default" : "outline"}
         >
-          <Link href="/client">
-            Client
-          </Link>
+          <Link href="/about/create">Create New Aboutus</Link>
         </Button>
-        <Button 
+        <Button
           asChild
-          variant={pathname === "/admin" ? "default" : "outline"}
+          variant={pathname === "/services/list" ? "default" : "outline"}
         >
-          <Link href="/admin">
-            Admin
-          </Link>
+          <Link href="/services/list">Services List</Link>
         </Button>
-        <Button 
+        <Button
+          asChild
+          variant={pathname === "/services/create" ? "default" : "outline"}
+        >
+          <Link href="/services/create">Create a Service</Link>
+        </Button>
+        <Button
           asChild
           variant={pathname === "/settings" ? "default" : "outline"}
         >
-          <Link href="/settings">
-            Settings
-          </Link>
+          <Link href="/settings">Settings</Link>
         </Button>
       </div>
       <UserButton />
