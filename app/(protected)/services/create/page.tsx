@@ -1,7 +1,7 @@
 "use client";
 import { useRef } from "react";
 import { useFormStatus } from "react-dom";
-import { addServices } from "@/actions/services";
+// import { addServices } from "@/actions/services";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import LoadingDots from "@/components/loading";
@@ -35,13 +35,13 @@ export default function AdminServices() {
     <div className="w-full">
       <form
         ref={formRef}
-        action={(data) =>
-          addServices(data).then(() => {
-            toast.success("Service created!");
-            formRef.current?.reset();
-            router.refresh();
-          })
-        }
+        // action={(data) =>
+        //   addServices(data).then(() => {
+        //     toast.success("Service created!");
+        //     formRef.current?.reset();
+        //     router.refresh();
+        //   })
+        // }
       >
         <div className="flex flex-col">
           <label>Title</label>
