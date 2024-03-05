@@ -87,24 +87,26 @@ def draw_bg1():
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
-    
-def restart_game():
-    global spaceship, bullet_group, alien_group, alien_bullet_group, explosion_group, game_over, countdown, last_alien_shot
-    game_over = 0
-    countdown = 3
-    
-    #reset game variables
-    bullet_group.empty()
-    alien_group.empty()
-    alien_bullet_group.empty()
-    explosion_group.empty()
-    create_aliens()
-    pygame.mixer.music.play()
-    
-    #reset spaceship
-    spaceship = Spaceship(int(SCREEN_WIDTH / 2), SCREEN_HEIGHT - 100, 3)
-    spaceship_group.add(spaceship)
 
+def restart_game():
+    #Clear all sprite groups
+        bullet_group.empty()
+        alien_group.empty()
+        alien_bullet_group.empty()
+        explosion_group.empty()
+        create_aliens()
+        pygame.mixer.music.play()
+            
+        #reset game variables
+        game_over = 0
+        countdown = 3
+        last_count = pygame.time.get_ticks()
+    
+        #reset spaceship
+        if len(spaceship_group) == 0:
+            spaceship = Spaceship(int(SCREEN_WIDTH / 2), SCREEN_HEIGHT - 100, 3)
+            spaceship_group.add(spaceship)
+    
 #Spaceship class
 class Spaceship(pygame.sprite.Sprite):
     def __init__(self, x, y, health):
@@ -321,7 +323,8 @@ while run:
         draw_text("PAUSED", font40, white, int(SCREEN_WIDTH / 2 - 100), int(SCREEN_HEIGHT / 2 - 170))   
             
         if restart_button.draw(screen):
-            restart_game()
+            restart_game()            
+            #reset current state to GAMEPLAY_STATE
             current_state = GAMEPLAY_STATE
         if exit_button.draw(screen):
             run = False
@@ -334,8 +337,10 @@ while run:
             
                     
         if restart_button.draw(screen):
-            restart_game()
+            restart_game()            
+            #reset current state to GAMEPLAY_STATE
             current_state = GAMEPLAY_STATE
+            
         if exit_button.draw(screen):
             run = False 
                 
@@ -383,6 +388,8 @@ while run:
                         elif pygame.time.get_ticks() - game_over_timer < GAME_OVER_DELAY:
                             pygame.mixer.music.fadeout(2000)
                         if game_over == 1:
+                            game_over_timer = pygame.time.get_ticks()
+                        elif pygame.time.get_ticks() - game_over_timer < GAME_OVER_DELAY:
                             pygame.mixer.music.fadeout(3000)
                             draw_text("YOU WIN!", font40, white, int(SCREEN_WIDTH / 2 - 100), int(SCREEN_HEIGHT / 2 + 50))         
         #update explosion group

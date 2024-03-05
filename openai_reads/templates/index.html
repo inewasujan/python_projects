@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask OpenAI</title>
+</head>
+<body>
+    <h1>Ask OpenAI</h1>
+    <form id="questionForm">
+        <label for="question">Ask a question:</label><br>
+        <textarea id="question" name="question" rows="4" cols="50"></textarea><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <div id="response"></div>
+
+    <script>
+        document.getElementById('questionForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ question: formData.get('question') })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to ask question.');
+                }
+
+                const jsonResponse = await response.json();
+
+                document.getElementById('response').innerText = jsonResponse.response;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

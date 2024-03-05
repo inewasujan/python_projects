@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "question": "Hey",
+      "answer": "Hello there! How can i help you?"
+    },
+    {
+      "question": "hi",
+      "answer": " Hello there! How can I help you ?"
+    },
+    {
+      "question": "hello mate",
+      "answer": "Hello again."
+    },
+    {
+      "question": "skip",
+      "answer": "clear"
+    },
+    {
+      "question": "hi there",
+      "answer": "hi mate"
+    },
+    {
+      "question": "How are you?",
+      "answer": "I'm good! Thanks for asking."
+    }
+  ]
+}
