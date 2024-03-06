@@ -7,7 +7,6 @@ import crypto from "crypto";
 import { auth } from "@/auth";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { toast } from "sonner";
 
 const s3Client = new S3Client({
   region: process.env.AWS_BUCKET_REGION!,
@@ -100,3 +99,40 @@ export const getSignedURL = async ({
 
   return { success: { url } };
 };
+
+export async function getServices() {
+  const services = await db.services.findMany();
+
+  return services;
+}
+
+export async function getService(id: string) {
+  const service = await db.services.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  return service;
+}
+
+export async function updateService(data: FormData) {
+  const id = data.get("id") as string;
+  const title = data.get("title") as string;
+  const description = data.get("description") as string;
+  const image_url = data.get("image_url") as string;
+
+  const service = await db.services.update({
+    where: {
+      id,
+    },
+
+    data: {
+      title,
+      description,
+      image_url,
+    },
+  });
+
+  return service;
+}
