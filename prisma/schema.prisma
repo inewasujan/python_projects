@@ -40,8 +40,7 @@ model Account {
   scope             String?
   id_token          String? @db.Text
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  User              User    @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
 }
@@ -83,10 +82,10 @@ model TwoFactorConfirmation {
 }
 
 model Services {
-  id          String @id @default(cuid())
-  name        String
+  id          String  @id @default(cuid())
+  title       String
   description String
-  img         String
+  image_url   String?
 }
 
 model Aboutus {
