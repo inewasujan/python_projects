@@ -1,13 +1,11 @@
-
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import openai
 
 
 app = Flask(__name__)
 
 # Set up OpenAI API credentials
-openai.api_key = "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"
-
+openai.api_key = "YOUR_API_KEY"
 
 # Define the default route to return the index.html file
 @app.route("/")
@@ -15,28 +13,25 @@ def index():
     return render_template("index.html")
 
 # Define the /api route to handle POST requests
-@app.route("/api", methods=["POST"])
-def api():
+@app.route("/ask", methods=["POST"])
+def ask():    
     # Get the message from the POST request
-    message = request.json.get("message")
+    user_input = request.form['user_input']
+        
     # Send the message to OpenAI's API and receive the response
-    
-    if not message:
-        return jsonify({"error": "No message provided"}), 400
-    
-    
-    completion = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "user", "content": message}
-    ]
-    )
-    if completion.choices[0].message!=None:
-        return completion.choices[0].message
-
-    else :
+    try:
+        completion = openai_client.complete(
+            model="davinci",
+            prompt=f"User: {user_input}\n",
+            max_tokens=150
+        )
+        chatbot_response = completion.choices[0].text.strip()
+        return jsonify({"response": chatbot_response}) 
+            
+    except Exception as e:
+        print({"An error occurred while generating response: ", str(e)})
         return 'Failed to Generate response!'
-    
+        
 
 if __name__=='__main__':
-    app.run()
+    app.run(debug=True)

@@ -3,43 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ask OpenAI</title>
+    <title>ChatGPT</title>
 </head>
 <body>
-    <h1>Ask OpenAI</h1>
-    <form id="questionForm">
-        <label for="question">Ask a question:</label><br>
-        <textarea id="question" name="question" rows="4" cols="50"></textarea><br><br>
-        <input type="submit" value="Submit">
-    </form>
-    <div id="response"></div>
+    <h1>Chat with ChatGPT</h1>
+    <div id="chat-container">
+        <div id="chat-log"></div>
+        <div id="user-input">
+            <input type="text" id="user-input-text" placeholder="Type your message...">
+            <button onclick="askChatGPT()">Send</button>
+        </div>
+    </div>
 
     <script>
-        document.getElementById('questionForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
+        function askChatGPT() {
+            const userInput = document.getElementById('user-input-text').value;
+            const chatLog = document.getElementById('chat-log');
 
-            const formData = new FormData(this);
+            // Display user input in the chat log
+            chatLog.innerHTML += `<div>User: ${userInput}</div>`;
 
-            try {
-                const response = await fetch('/ask', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ question: formData.get('question') })
-                });
+            // Send user input to server for processing
+            fetch('/api', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `user_input=${encodeURIComponent(userInput)}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display ChatGPT response in the chat log
+                chatLog.innerHTML += `<div>ChatGPT: ${data.response}</div>`;
+            })
+            .catch(error => console.error('Error:', error));
 
-                if (!response.ok) {
-                    throw new Error('Failed to ask question.');
-                }
-
-                const jsonResponse = await response.json();
-
-                document.getElementById('response').innerText = jsonResponse.response;
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        });
+            // Clear user input field
+            document.getElementById('user-input-text').value = '';
+        }
     </script>
 </body>
 </html>
