@@ -93,3 +93,12 @@ model Aboutus {
   title       String
   description String
 }
+
+model Testimony {
+  id        String @id @default(cuid())
+  full_name String
+  title     String
+  testimony String
+  image_url String
+  stars     Int
+}

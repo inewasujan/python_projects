@@ -1,11 +1,11 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import LoadingDots from "@/components/loading";
 import { cn } from "@/lib/utils";
-import { createService, getSignedURL } from "@/actions/services";
+import { updateTestimony, getSignedURL, getTestimony } from "@/actions/testimonial";
 
 const FormButton = () => {
   const { pending } = useFormStatus();
@@ -25,12 +25,27 @@ const FormButton = () => {
   );
 };
 
-export default function AdminServices() {
+interface ServiceProps {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+}
+
+export default function EditTestimony() {
   const formRef = useRef<HTMLFormElement>(null);
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id")!;
+
+  const [testimony, settestimony] = useState(getTestimony(id));
+  const [serviceData, setServiceData] = useState<ServiceProps>();
+  const [imgurl, setImgurl] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
+    id: "",
+    full_name: "",
     title: "",
-    description: "",
+    testimony: "",
     image_url: "",
   });
   const [file, setFile] = useState<File | null>(null);
@@ -77,17 +92,21 @@ export default function AdminServices() {
 
       if (file) {
         url = await handleFileUpload(file);
+      } else {
+        url = formData.image_url;
       }
 
       const formDataObj: FormData = new FormData();
 
+      formDataObj.append("id", formData.id);
+      formDataObj.append("full_name", formData.full_name);
       formDataObj.append("title", formData.title);
-      formDataObj.append("description", formData.description);
+      formDataObj.append("testimony", formData.testimony);
       formDataObj.append("image_url", url);
 
-      createService(formDataObj);
+      updateTestimony(formDataObj);
 
-      toast.success("Service created!");
+      toast.success("Service Updated Successfully");
     } catch (error) {
       console.error(error);
       toast.error("Service creation failed");
@@ -98,6 +117,7 @@ export default function AdminServices() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] ?? null;
+
     setFile(file);
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
@@ -114,10 +134,27 @@ export default function AdminServices() {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
+  useEffect(() => {
+    testimony.then((data: any) => {
+      if (data) {
+        setFormData({
+          id: data.id,
+          full_name: data.full_name,
+          title: data.title,
+          testimony: data.testimony,
+          image_url: data.image_url,
+        });
+      } else {
+        console.log("No data found");
+      }
+    });
+  }, []);
+
   return (
     <div className="w-full">
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="flex flex-col">
+          <input type="text" value={formData.id} hidden />
           <label>Title</label>
           <input
             type="text"
@@ -129,12 +166,12 @@ export default function AdminServices() {
           />
         </div>
         <div className="flex flex-col my-10">
-          <label>Description</label>
+          <label>Testimony</label>
           <textarea
-            name="description"
+            name="testimony"
             className="border border-gray-300 rounded-lg mt-2 p-2 h-96"
             placeholder="Write something here..."
-            value={formData.description}
+            value={formData.testimony}
             onChange={handleChange}
           />
         </div>
@@ -145,9 +182,19 @@ export default function AdminServices() {
             name="image_url"
             className="border border-gray-300 rounded-lg mt-2 p-2"
             placeholder="Image"
-            accept="image/svg+xml"
+            accept="image/jpg, image/jpeg, image/png"
             onChange={handleFileChange}
           />
+          <div className="mt-5">
+            {!file ? (
+              <div>
+                Current image preview:{" "}
+                <img src={formData.image_url} alt="preview" />
+              </div>
+            ) : (
+              <div>Image Uploaded.</div>
+            )}
+          </div>
         </div>
         <div className="mt-10">
           <FormButton />
