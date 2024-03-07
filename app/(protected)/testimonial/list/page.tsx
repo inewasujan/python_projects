@@ -5,9 +5,6 @@ export default async function ListTestimonial() {
 
     const data = await getTestimonials();
 
-    
-
-
     return(
         <div>
             <div className="flex flex-col w-full  p-3">

@@ -23,7 +23,6 @@ export async function createTestimonial(data: FormData) {
     return { failure: "not authenticated" };
   }
 
-
   const full_name = data.get("full_name") as string;
   const title = data.get("title") as string;
   const testimony = data.get("testimony") as string;

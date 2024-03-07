@@ -1,12 +1,10 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import LoadingDots from "@/components/loading";
 import { cn } from "@/lib/utils";
 import { createTestimonial, getSignedURL } from "@/actions/testimonial";
-import Select from 'react-select';
 
 const FormButton = () => {
   const { pending } = useFormStatus();
