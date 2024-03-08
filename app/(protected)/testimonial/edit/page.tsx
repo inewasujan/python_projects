@@ -5,7 +5,11 @@ import { toast } from "sonner";
 import { useSearchParams } from "next/navigation";
 import LoadingDots from "@/components/loading";
 import { cn } from "@/lib/utils";
-import { updateTestimony, getSignedURL, getTestimony } from "@/actions/testimonial";
+import {
+  updateTestimony,
+  getSignedURL,
+  getTestimony,
+} from "@/actions/testimonial";
 
 const FormButton = () => {
   const { pending } = useFormStatus();
@@ -25,11 +29,12 @@ const FormButton = () => {
   );
 };
 
-interface ServiceProps {
+interface TestamonialProps {
   id: string;
   title: string;
   description: string;
   image_url: string;
+  stars: number;
 }
 
 export default function EditTestimony() {
@@ -38,7 +43,7 @@ export default function EditTestimony() {
   const id = searchParams.get("id")!;
 
   const [testimony, settestimony] = useState(getTestimony(id));
-  const [serviceData, setServiceData] = useState<ServiceProps>();
+  const [serviceData, setServiceData] = useState<TestamonialProps>();
   const [imgurl, setImgurl] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -47,6 +52,7 @@ export default function EditTestimony() {
     title: "",
     testimony: "",
     image_url: "",
+    stars: 1,
   });
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -103,6 +109,7 @@ export default function EditTestimony() {
       formDataObj.append("title", formData.title);
       formDataObj.append("testimony", formData.testimony);
       formDataObj.append("image_url", url);
+      formDataObj.append("stars", formData.stars.toString());
 
       updateTestimony(formDataObj);
 
@@ -143,6 +150,7 @@ export default function EditTestimony() {
           title: data.title,
           testimony: data.testimony,
           image_url: data.image_url,
+          stars: data.stars,
         });
       } else {
         console.log("No data found");
@@ -154,13 +162,23 @@ export default function EditTestimony() {
     <div className="w-full">
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="flex flex-col">
-          <input type="text" value={formData.id} hidden />
+          <label>Full name</label>
+          <input
+            type="text"
+            name="full_name"
+            className="border border-gray-300 rounded-lg mt-2 p-2"
+            placeholder="John Doe"
+            value={formData.full_name}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex flex-col my-10">
           <label>Title</label>
           <input
             type="text"
             name="title"
             className="border border-gray-300 rounded-lg mt-2 p-2"
-            placeholder="Home Cleaning"
+            placeholder="CEO"
             value={formData.title}
             onChange={handleChange}
           />
@@ -196,6 +214,22 @@ export default function EditTestimony() {
             )}
           </div>
         </div>
+        <div className="flex flex-col my-10">
+          <label>Review Stars</label>
+          <select
+            onChange={handleChange}
+            name="stars"
+            className="border border-gray-300 rounded-lg mt-2 p-2"
+            value={formData.stars}
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+        </div>
+
         <div className="mt-10">
           <FormButton />
         </div>

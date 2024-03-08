@@ -18,12 +18,12 @@ export const Navbar = () => {
         >
           <Link href="/about/list">Current Aboutus</Link>
         </Button>
-        <Button
+        {/* <Button
           asChild
           variant={pathname === "/about/create" ? "default" : "outline"}
         >
-          <Link href="/about/create">Create New Aboutus</Link>
-        </Button>
+          <Link href="/about/create">Edit Aboutus</Link>
+        </Button> */}
         <Button
           asChild
           variant={pathname === "/services/create" ? "default" : "outline"}

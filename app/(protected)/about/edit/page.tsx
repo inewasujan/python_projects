@@ -1,11 +1,12 @@
 "use client";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { useFormStatus } from "react-dom";
 import { updateAbout } from "@/actions/about";
 import LoadingDots from "@/components/loading";
 import { cn } from "@/lib/utils";
+import { getUniqueAboutus } from "@/actions/about";
 
 const FormButton = () => {
   const { pending } = useFormStatus();
@@ -25,11 +26,33 @@ const FormButton = () => {
   );
 };
 
-export default async function AboutEdit() {
+export default function AboutEdit() {
   const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const searchParams = useSearchParams();
   const id = searchParams.get("id")!;
+
+  const [data, setData] = useState(getUniqueAboutus(id));
+  const [formData, setFormData] = useState({
+    id: "",
+    title: "",
+    description: "",
+  });
+
+  useEffect(() => {
+    if (data) {
+      data.then((data: any) => {
+        setFormData({
+          id: data.id,
+          title: data.title,
+          description: data.description,
+        });
+      });
+    } else {
+      console.log("no data found");
+    }
+    // setData(getUniqueAboutus(id));
+  });
 
   return (
     <div>
@@ -51,6 +74,7 @@ export default async function AboutEdit() {
             name="title"
             className="border border-gray-300 rounded-lg mt-2 p-2"
             placeholder="About us"
+            value={formData?.title}
           />
         </div>
         <div className="flex flex-col my-10">
@@ -59,6 +83,7 @@ export default async function AboutEdit() {
             name="desc"
             className="border border-gray-300 rounded-lg mt-2 p-2"
             placeholder="Write something here."
+            value={formData?.description}
           />
         </div>
         <div>

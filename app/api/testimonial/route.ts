@@ -1,15 +1,15 @@
 import { db } from "@/lib/db";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const about = await db.aboutus.findFirst({
+    const testimony = await db.testimony.findMany({
       orderBy: {
         id: "desc",
       },
     });
 
-    return NextResponse.json({ about });
+    return NextResponse.json({ testimony });
   } catch (error) {
     console.error("Error fetching data:", error);
     return NextResponse.error();
