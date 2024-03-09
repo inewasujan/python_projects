@@ -43,8 +43,6 @@ export default function EditTestimony() {
   const id = searchParams.get("id")!;
 
   const [testimony, settestimony] = useState(getTestimony(id));
-  const [serviceData, setServiceData] = useState<TestamonialProps>();
-  const [imgurl, setImgurl] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     id: "",
@@ -187,7 +185,7 @@ export default function EditTestimony() {
           <label>Testimony</label>
           <textarea
             name="testimony"
-            className="border border-gray-300 rounded-lg mt-2 p-2 h-96"
+            className="border border-gray-300 rounded-lg mt-2 p-2 h-52"
             placeholder="Write something here..."
             value={formData.testimony}
             onChange={handleChange}

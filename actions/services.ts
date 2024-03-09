@@ -24,12 +24,14 @@ export async function createService(data: FormData) {
   }
 
   const title = data.get("title") as string;
+  const subtitle = data.get("subtitle") as string;
   const description = data.get("description") as string;
   const image_url = data.get("image_url") as string;
 
   await db.services.create({
     data: {
       title,
+      subtitle,
       description,
       image_url,
     },
@@ -119,6 +121,7 @@ export async function getService(id: string) {
 export async function updateService(data: FormData) {
   const id = data.get("id") as string;
   const title = data.get("title") as string;
+  const subtitle = data.get("subtitle") as string;
   const description = data.get("description") as string;
   const image_url = data.get("image_url") as string;
 
@@ -129,6 +132,7 @@ export async function updateService(data: FormData) {
 
     data: {
       title,
+      subtitle,
       description,
       image_url,
     },

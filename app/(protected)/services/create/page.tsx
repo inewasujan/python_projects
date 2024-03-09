@@ -2,7 +2,6 @@
 import React, { useState, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import LoadingDots from "@/components/loading";
 import { cn } from "@/lib/utils";
 import { createService, getSignedURL } from "@/actions/services";
@@ -30,6 +29,7 @@ export default function AdminServices() {
 
   const [formData, setFormData] = useState({
     title: "",
+    subtitle: "",
     description: "",
     image_url: "",
   });
@@ -82,6 +82,7 @@ export default function AdminServices() {
       const formDataObj: FormData = new FormData();
 
       formDataObj.append("title", formData.title);
+      formDataObj.append("subtitle", formData.subtitle);
       formDataObj.append("description", formData.description);
       formDataObj.append("image_url", url);
 
@@ -129,6 +130,16 @@ export default function AdminServices() {
           />
         </div>
         <div className="flex flex-col my-10">
+          <label>Subtitle</label>
+          <input
+            name="subtitle"
+            className="border border-gray-300 rounded-lg mt-2 p-2 "
+            placeholder="Keep it small in 5-6 words"
+            value={formData.subtitle}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex flex-col my-10">
           <label>Description</label>
           <textarea
             name="description"
@@ -139,7 +150,7 @@ export default function AdminServices() {
           />
         </div>
         <div>
-          <label>Image</label>
+          <label>SVG</label>
           <input
             type="file"
             name="image_url"

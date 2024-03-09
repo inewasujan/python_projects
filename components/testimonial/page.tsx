@@ -57,10 +57,10 @@ export default function Testimonials() {
         {isLoading ? (
           <div>Loading</div>
         ) : (
-          <div className="lg:flex grid grid-cols-1 md:grid-cols-2 justify-center items-center gap-8">
+          <div className="grid grid-cols-3 gap-8">
             {Object.values(data?.testimony || []).map((testimony: any) => (
               <motion.div
-                className="group h-full bg-white border border-solid border-gray-300 rounded-2xl p-6 transition-all duration-500 w-full max-w-md hover:border-indigo-600 mx-auto md:mr-0"
+                className=" bg-white border border-solid border-gray-300 rounded-2xl p-6 transition-all duration-500 w-full max-w-md hover:border-indigo-600 mx-auto md:mr-0"
                 variants={fadeInUp}
                 initial="initial"
                 whileInView="animate"
@@ -85,7 +85,7 @@ export default function Testimonials() {
                     times={testimony.stars}
                   />
                 </div>
-                <p className="text-lg text-gray-500 leading-8 h-24 transition-all duration-500 mb-9 group-hover:text-gray-800">
+                <p className="text-lg text-gray-500 leading-8 transition-all duration-500 mb-9 group-hover:text-gray-800">
                   {testimony.testimony}
                 </p>
                 <div className="flex items-center gap-5">

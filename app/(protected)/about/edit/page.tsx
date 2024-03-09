@@ -51,8 +51,7 @@ export default function AboutEdit() {
     } else {
       console.log("no data found");
     }
-    // setData(getUniqueAboutus(id));
-  });
+  }, []);
 
   return (
     <div>
@@ -60,30 +59,31 @@ export default function AboutEdit() {
         className="w-full h-full"
         ref={formRef}
         action={(data) =>
-          updateAbout(id, data).then(() => {
-            toast.success("Post created!");
+          updateAbout(formData.id, data).then(() => {
+            toast.success("Post updated!");
             formRef.current?.reset();
             router.refresh();
           })
         }
       >
         <div className="flex flex-col my-10">
+          <input defaultValue={formData.id} hidden />
           <label>Title</label>
           <input
             type="text"
             name="title"
             className="border border-gray-300 rounded-lg mt-2 p-2"
             placeholder="About us"
-            value={formData?.title}
+            defaultValue={formData?.title}
           />
         </div>
         <div className="flex flex-col my-10">
           <label>Description</label>
           <textarea
             name="desc"
-            className="border border-gray-300 rounded-lg mt-2 p-2"
+            className="border border-gray-300 rounded-lg mt-2 p-2 h-96"
             placeholder="Write something here."
-            value={formData?.description}
+            defaultValue={formData?.description}
           />
         </div>
         <div>

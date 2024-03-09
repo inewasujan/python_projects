@@ -28,6 +28,7 @@ const FormButton = () => {
 interface ServiceProps {
   id: string;
   title: string;
+  subtitle: string;
   description: string;
   image_url: string;
 }
@@ -38,12 +39,11 @@ export default function EditServices() {
   const id = searchParams.get("id")!;
 
   const [services, setServices] = useState(getService(id));
-  const [serviceData, setServiceData] = useState<ServiceProps>();
-  const [imgurl, setImgurl] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     id: "",
     title: "",
+    subtitle: "",
     description: "",
     image_url: "",
   });
@@ -99,6 +99,7 @@ export default function EditServices() {
 
       formDataObj.append("id", formData.id);
       formDataObj.append("title", formData.title);
+      formDataObj.append("subtitle", formData.subtitle);
       formDataObj.append("description", formData.description);
       formDataObj.append("image_url", url);
 
@@ -138,6 +139,7 @@ export default function EditServices() {
         setFormData({
           id: data.id,
           title: data.title,
+          subtitle: data.subtitle,
           description: data.description,
           image_url: data.image_url,
         });
@@ -151,7 +153,6 @@ export default function EditServices() {
     <div className="w-full">
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="flex flex-col">
-          <input type="text" value={formData.id} hidden />
           <label>Title</label>
           <input
             type="text"
@@ -159,6 +160,17 @@ export default function EditServices() {
             className="border border-gray-300 rounded-lg mt-2 p-2"
             placeholder="Home Cleaning"
             value={formData.title}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex flex-col my-10">
+          <label>Sub title</label>
+          <input
+            type="text"
+            name="subtitle"
+            className="border border-gray-300 rounded-lg mt-2 p-2"
+            placeholder="Keep it short in 5-6 words"
+            value={formData.subtitle}
             onChange={handleChange}
           />
         </div>

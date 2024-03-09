@@ -84,6 +84,7 @@ model TwoFactorConfirmation {
 model Services {
   id          String  @id @default(cuid())
   title       String
+  subtitle    String?
   description String
   image_url   String?
 }

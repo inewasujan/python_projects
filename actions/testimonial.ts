@@ -35,7 +35,7 @@ export async function createTestimonial(data: FormData) {
       full_name,
       testimony,
       image_url,
-      stars
+      stars,
     },
   });
 
@@ -99,7 +99,11 @@ export const getSignedURL = async ({
 };
 
 export async function getTestimonials() {
-  const testimony = await db.testimony.findMany();
+  const testimony = await db.testimony.findMany({
+    orderBy: {
+      id: "desc",
+    },
+  });
 
   return testimony;
 }

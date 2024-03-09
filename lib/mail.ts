@@ -1,6 +1,7 @@
+"use server"
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY!);
 
 const domain = process.env.NEXT_PUBLIC_APP_URL!;
 const fromEmail = process.env.NEXT_PUBLIC_FROM_MAIL!;
@@ -35,3 +36,20 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     html: `<p>Click <a href="${confirmLink}">here</a> to confirm email.</p>`,
   });
 };
+
+export const sendContactEmail = async (data: FormData) => {
+  const full_name = data.get("full_name") as string;
+  const email = data.get("email") as string;
+  const subject = data.get("subject") as string;
+  const message = data.get("message") as string;
+
+  await resend.emails.send({
+    from: fromEmail,
+    to: email,
+    subject: subject,
+    html: `<p>
+      Sender: ${full_name},
+      Message: ${message}
+      </p>`,
+  })
+}
