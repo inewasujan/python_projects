@@ -2,15 +2,19 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-const fadeInUp = {
+const fadeIn = {
   initial: {
     opacity: 0,
-    y: 200,
+    x: -300,
   },
   animate: {
     opacity: 1,
-    duration: 5,
-    y: 0,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      delay: 0.5,
+      Easing: "easeInOut",
+    },
   },
 };
 
@@ -57,14 +61,16 @@ export default function Testimonials() {
         {isLoading ? (
           <div>Loading</div>
         ) : (
-          <div className="grid grid-cols-3 gap-8">
+          <motion.div
+            className="grid grid-cols-3 gap-8"
+            variants={fadeIn}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+          >
             {Object.values(data?.testimony || []).map((testimony: any) => (
-              <motion.div
+              <div
                 className=" bg-white border border-solid border-gray-300 rounded-2xl p-6 transition-all duration-500 w-full max-w-md hover:border-indigo-600 mx-auto md:mr-0"
-                variants={fadeInUp}
-                initial="initial"
-                whileInView="animate"
-                viewport={{ once: true }}
                 key={testimony.id}
               >
                 <div className="flex items-center mb-9 gap-2 text-amber-500 transition-all duration-500  group-hover:text-indigo-600">
@@ -103,9 +109,9 @@ export default function Testimonials() {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </section>

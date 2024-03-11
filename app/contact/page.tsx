@@ -7,15 +7,35 @@ import { motion } from "framer-motion";
 import { sendContactEmail } from "@/lib/mail";
 import { toast } from "sonner";
 
-const fadeInUp = {
+const fadeInLeft = {
   initial: {
     opacity: 0,
-    y: 400,
+    x: -300,
   },
   animate: {
-    duration: 5,
     opacity: 1,
-    y: 0,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      delay: 0.5,
+      Easing: "easeInOut",
+    },
+  },
+};
+
+const fadeInRight = {
+  initial: {
+    opacity: 0,
+    x: 300,
+  },
+  animate: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.5,
+      delay: 0.5,
+      Easing: "easeInOut",
+    },
   },
 };
 
@@ -32,7 +52,7 @@ export default function Contact() {
         }}
       ></div>
       <div className="container mx-auto flex flex-col lg:flex-row sm:flex-col xs:flex-col pb-40 gap-8 lg:gap-32 sm:gap-5 xs:gap-3">
-        <motion.div variants={fadeInUp} initial="initial" animate="animate">
+        <motion.div variants={fadeInLeft} initial="initial" animate="animate">
           <ContactIcon height={60} width={60} />
           <h2 className="text-5xl tracking-tighter font-bold min-w-80 mt-5">
             Contact
@@ -43,7 +63,11 @@ export default function Contact() {
           </p>
         </motion.div>
         <div className="text-lg leading-8 tracking-normal text-justify w-full">
-          <motion.div variants={fadeInUp} initial="initial" animate="animate">
+          <motion.div
+            variants={fadeInRight}
+            initial="initial"
+            animate="animate"
+          >
             <form
               ref={formRef}
               action={(data) =>
