@@ -1,6 +1,9 @@
 import openai
 import os
 
+OPENAI_KEY = os.getenv("OPENAI_KEY")
+print("hello", OPENAI_KEY)
+
 openai.api_key = "YOUR_API_KEY"
 
 def answer_question(chunk, question):

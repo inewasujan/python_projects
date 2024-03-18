@@ -101,6 +101,9 @@ def restart_game():
         game_over = 0
         countdown = 3
         last_count = pygame.time.get_ticks()
+        
+        # #Reset game over timer
+        # game_over_timer = None
     
         #reset spaceship
         if len(spaceship_group) == 0:
@@ -387,6 +390,7 @@ while run:
                             game_over_timer = pygame.time.get_ticks()
                         elif pygame.time.get_ticks() - game_over_timer < GAME_OVER_DELAY:
                             pygame.mixer.music.fadeout(2000)
+                            draw_text("GAME OVER!", font40, white, int(SCREEN_WIDTH / 2 - 130), int(SCREEN_HEIGHT / 2 - 170))   
                         if game_over == 1:
                             game_over_timer = pygame.time.get_ticks()
                         elif pygame.time.get_ticks() - game_over_timer < GAME_OVER_DELAY:
